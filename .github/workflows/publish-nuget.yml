@@ -1,0 +1,32 @@
+﻿name: publish-nuget
+run-name: ${{ github.actor }} is publishing a nuget package
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  publish-nuget-packages:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        run: dotnet restore ./NapPlana.Net.Core/NapPlana.Net.Core.csproj
+      - name: Build
+        run: dotnet build --no-restore -c Release ./NapPlana.Net.Core/NapPlana.Net.Core.csproj
+      - name: Create the package
+        run: dotnet pack -c Release ./NapPlana.Net.Core/NapPlana.Net.Core.csproj
+      - name: Add nuget source
+        run: dotnet nuget add source --username stevesensei --password ${{ secrets.TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/stevesensei/index.json"
+      - name: Publish the package to Github Packages
+        run: dotnet nuget push ./NapPlana.Net.Core/bin/Release/*.nupkg --api-key ${{ secrets.TOKEN }} --source github --skip-duplicate
+      - name: Publish the package to Nuget Gallery
+        run: dotnet nuget push ./NapPlana.Net.Core/Release/*.nupkg --api-key ${{ secrets.NUGET_GALLERY_TOKEN }}  --source nuget.org --skip-duplicate

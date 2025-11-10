@@ -375,5 +375,8 @@ public enum ApiActionType
     [JsonPropertyName("get_version_info")]
     GetVersionInfo = 33,
     [JsonPropertyName("clean_cache")]
-    CleanCache = 34
+    CleanCache = 34,
+    
+    [JsonPropertyName("send_poke")]
+    SendPoke = 35
 }

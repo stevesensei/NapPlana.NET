@@ -19,3 +19,15 @@ public class GroupMessageSendResponseData : ResponseDataBase
     [JsonPropertyName("message_id")]
     public long MessageId { get; set; } = 0;
 }
+
+public class PokeMessageSend
+{
+    [JsonPropertyName("group_id")]
+    public string? GroupId { get; set; } = null;
+    
+    [JsonPropertyName("user_id")]
+    public string UserId { get; set; } = string.Empty;
+    
+    [JsonPropertyName("target_id")]
+    public string TargetId { get; set; } = string.Empty;
+}

@@ -6,6 +6,15 @@
         <Nullable>enable</Nullable>
         <AssemblyName>NapPlana.Net.Core</AssemblyName>
         <RootNamespace>NapPlana.Core</RootNamespace>
+        <UserSecretsId>80185e78-85e8-4e72-bdd0-5d04bc13506f</UserSecretsId>
+        <PackageId>NapPlana</PackageId>
+        <Version>0.0.1</Version>
+        <Title>NapPlana.NET</Title>
+        <Authors>stevesensei</Authors>
+        <Description>Yet Another NapCat Framework SDK for .NET</Description>
+        <PackageProjectUrl>https://github.com/stevesensei/NapPlana.NET</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/stevesensei/NapPlana.NET</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
     <ItemGroup>

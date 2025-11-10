@@ -63,4 +63,31 @@ public class NapBot
 
         throw new TimeoutException("Timed out waiting for send_group_msg response.");
     }
+    
+    public async Task SendPokeAsync(PokeMessageSend pokeMessage)
+    {
+        if (pokeMessage is null) throw new ArgumentNullException(nameof(pokeMessage));
+        
+        var echo = Guid.NewGuid().ToString();
+        await _connection.SendMessageAsync(ApiActionType.SendPoke, pokeMessage, echo);
+        
+        var timeout = TimeSpan.FromSeconds(15);
+        var start = DateTime.UtcNow;
+
+        while (DateTime.UtcNow - start < timeout)
+        {
+            if (ApiHandler.TryConsume(echo, out var response))
+            {
+                if (response.RetCode != 0)
+                {
+                    throw new InvalidOperationException($"send_poke failed: {response.RetCode} - {response.Message}");
+                }
+                return;
+            }
+
+            await Task.Delay(50);
+        }
+
+        throw new TimeoutException("Timed out waiting for send_poke response.");
+    }
 }
