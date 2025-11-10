@@ -6,12 +6,13 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+  
 jobs:
   publish-nuget-packages:
-
     runs-on: ubuntu-latest
-
+    permissions:
+      packages: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET

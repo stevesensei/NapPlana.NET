@@ -7,7 +7,7 @@
         <AssemblyName>NapPlana.Net.Core</AssemblyName>
         <RootNamespace>NapPlana.Core</RootNamespace>
         <UserSecretsId>80185e78-85e8-4e72-bdd0-5d04bc13506f</UserSecretsId>
-        <PackageId>NapPlana</PackageId>
+        <PackageId>NapPlana.NET</PackageId>
         <Version>0.0.1</Version>
         <Title>NapPlana.NET</Title>
         <Authors>stevesensei</Authors>
