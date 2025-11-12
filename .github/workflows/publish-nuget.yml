@@ -16,13 +16,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Setup .NET
+      - name: 安装.NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 9.0.x
-      - name: Restore dependencies
+      - name: 恢复依赖
         run: dotnet restore ./NapPlana.Net.Core/NapPlana.Net.Core.csproj
-      - name: Determine package version from tag
+      - name: 获取tag
         id: version
         shell: bash
         run: |
@@ -33,13 +33,13 @@ jobs:
           fi
           echo "PACKAGE_VERSION=$ref" >> "$GITHUB_ENV"
           echo "package_version=$ref" >> "$GITHUB_OUTPUT"
-      - name: Build
+      - name: 构建
         run: dotnet build --no-restore -c Release ./NapPlana.Net.Core/NapPlana.Net.Core.csproj
-      - name: Create the package
+      - name: 创建软件包
         run: dotnet pack --no-build -c Release -p:PackageVersion=${{ env.PACKAGE_VERSION }} ./NapPlana.Net.Core/NapPlana.Net.Core.csproj
-      - name: Add nuget source
+      - name: 添加nuget源
         run: dotnet nuget add source --username stevesensei --password ${{ secrets.TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/napplana/index.json"
-      - name: Publish the package to Github Packages
+      - name: 推送到github packages
         run: dotnet nuget push ./NapPlana.Net.Core/bin/Release/*.nupkg --api-key ${{ secrets.TOKEN }} --source github --skip-duplicate
-      - name: Publish the package to Nuget Gallery
+      - name: 推送到nuget
         run: dotnet nuget push ./NapPlana.Net.Core/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_GALLERY_TOKEN }}  --source nuget.org --skip-duplicate

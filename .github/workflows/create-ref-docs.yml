@@ -16,17 +16,18 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    name: Generate and deploy Doxygen docs
+    name: 生成部署文档
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository (with LFS)
+      - name: 检出
         uses: actions/checkout@v4
         with:
           lfs: true
           fetch-depth: 0
+          submodules: 'true'
 
-      - name: Ensure tag is on 'master' branch
+      - name: 主分支tag
         id: tag_check
         shell: bash
         run: |
@@ -51,17 +52,17 @@ jobs:
             echo "Tag commit is not contained in 'master' branch. Skipping deployment."
           fi
 
-      - name: Stop if tag is not on master branch
+      - name: 不在主分支的tag，直接放弃
         if: steps.tag_check.outputs.on_master != 'true'
         run: echo "No deployment tag not on master branch."
 
-      - name: Install Doxygen and Graphviz
+      - name: 安装依赖
         if: steps.tag_check.outputs.on_master == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz
 
-      - name: Fill tag version into Doxyfile
+      - name: 编辑Doxyfile
         if: steps.tag_check.outputs.on_master == 'true'
         working-directory: api-doc
         run: |
@@ -71,7 +72,7 @@ jobs:
           sed -i "s/{{package_version}}/${ESCAPED_TAG}/g" Doxyfile
           echo "Injected version '${TAG}' into Doxyfile"
 
-      - name: Build Doxygen documentation
+      - name: 构建
         if: steps.tag_check.outputs.on_master == 'true'
         working-directory: api-doc
         run: |
@@ -85,13 +86,13 @@ jobs:
         if: steps.tag_check.outputs.on_master == 'true'
         uses: actions/configure-pages@v4
 
-      - name: Upload Pages artifact
+      - name: 上传产物
         if: steps.tag_check.outputs.on_master == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: api-doc/html
 
-      - name: Deploy to GitHub Pages
+      - name: 部署
         if: steps.tag_check.outputs.on_master == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
